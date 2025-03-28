@@ -1,14 +1,28 @@
-print('PROGRAMA PARA FAZER AS CONDICIONAIS')
+print('Seja bem-vindo ao Sistema de Monitoramento de sustentbilidade')
 
-data = input('Digite a data de hoje: ')
+try:
+   data=int(input('Digite a data atual: \n '))
+except ValueError:
+   print('Invalido,Valor deve ser numerico ')
+try:
+   qtd_de_agua_litros=float(input('Quantos lintros de água você consumiu hoje: \n'))
+except ValueError:
+   print('Ivalido,valor deve ser numerico!')
 
-consumoAgua = int(input('Quantos litros de água você consumiu hoje? (Aprox em litros): '))
 
-consumoEnergia = int(input('Quantos kWh de energia elétrica você consumiu  hoje?: '))
+try:
+   uso_energia_eletrica_kwh=float(input('Quantos kWh de energia eletrica voce consumiu hoje: \n'))
+except ValueError:
+    print('Ivalido, valor deve ser numerico !')
 
-geracaoDeLixo = int(input('Quantos kgs de resíduos não recicláveis você gerou hoje?: '))
+try: 
+   residuos_nao_reciclaveis_kg=float(input('Quantos kg de resiudos não reciclaveis voce gerou hoje: \n'))
+except ValueError:
+   print('Ivalido, valor deve ser numerico!')
 
-porcentagemDeReciclagem = int(input('Qual a porcentagem de resíudos reciclados no total (em %)?: '))
+try:
+   porcentagem_de_reciclado_hoje= float(input('Qual e a porcentagem de residuos reciclados no total em (%): \n'))
+except ValueError:
+    print( 'Ivalido, valor deve ser numerico')
 
-#A Fazer
-tipoTransporte = True
+
