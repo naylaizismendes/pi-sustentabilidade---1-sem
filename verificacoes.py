@@ -38,7 +38,16 @@ while not validador:
       print('Invalido, o valor deve ser numerico, Tente novamente!')
    else:
       validador = True
-    
+
+print ('Quais meios de transporte você utilizou hoje? Responda apenas (S / N)')
+
+transportePublico = input('1. Transporte público (Ônibus,metrô, trem): ')
+bicicleta = input('2. Bicicleta: ')
+caminhada = input('3. Caminhada: ')
+carro = input('4. Carro (Combustível Fóssil): ')
+carroEletrico = input('5. Carro elétrico: ')
+carona = input('6. Carona compartilhada (Fósseis): ')
+
 # Verifica o consumo de água
 if qtd_de_agua_litros < 150:
    print('Consumo de Água: Alta sustentabilidade')
@@ -62,3 +71,13 @@ elif porcentagem_de_reciclado_hoje >= 20 and porcentagem_de_reciclado_hoje <= 50
    print('Porcentagem de resíduos reciclados: Moderada sustentabilidade')
 else:
    print('Porcentagem de resíduos reciclados: Alta sustentabilidade') 
+
+# sustentavel = 0 
+# naoSustentavel = 0
+# if transportePublico == 'S':
+#    sustentavel += 1
+# if bicicleta == 'S':
+#    sustentavel +=1
+# if caminhada == 'S':
+#    sustentavel += 1
+# if 
