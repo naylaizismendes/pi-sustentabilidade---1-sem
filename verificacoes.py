@@ -119,3 +119,6 @@ elif sustentavel == 0 and naoSustentavel >= 1:
     print("Uso de transporte: Baixa sustentabilidade")
 else:
     print("Uso de transporte: Sustentabilidade moderada")
+
+
+# Feito os testes nas condicionais
