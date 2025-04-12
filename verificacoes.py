@@ -1,3 +1,11 @@
+from conexao import conectar
+bd = conectar()
+cursor = bd.cursor()
+
+cursor.execute("SELECT * FROM sustentabilidade_pessoal")
+myresult = cursor.fetchall()
+print(myresult)
+
 print('Seja bem-vindo ao Sistema de Monitoramento de Sustentabilidade')
 
 
