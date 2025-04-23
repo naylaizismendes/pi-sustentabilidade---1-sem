@@ -1,14 +1,20 @@
 import mysql.connector
 
-chave_conexao = {
-    "host": "localhost", # Con banco
-    "port": "3306",
-    "user": "root",
-    "password": "",
-}
-# print(chave_conexao)
-
+conexao = mysql.connector(
+    host= 'localhost', # Con banco
+    user='root',
+    port='3306',
+    password= "saopaulo",
+    database='projeto_sustentabilidade'
+)
+# print(conexao)
 def conectar():
-    bd = mysql.connector.connect(**chave_conexao)
+    try:
+        bd = mysql.connector.connect(**conexao)
+        print("Conexão estabelecida com sucesso!")
+        return bd
+    except mysql.connector.Error as erro:
+        print(f"Erro ao conectar ao MySQL: {erro}")
+        return None
 
 # Conexão com o banco mysql basico

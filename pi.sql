@@ -17,6 +17,7 @@ carro_eletrico enum('Sim','Nao'),
 carona enum('Sim','Nao'),
 primary key (codigo)
 );
+
 #exibir tabela
 select * from verficador;
 describe verficador;
