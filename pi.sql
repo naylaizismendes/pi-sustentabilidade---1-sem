@@ -17,6 +17,13 @@ carro_eletrico enum('Sim','Nao'),
 carona enum('Sim','Nao'),
 primary key (codigo)
 );
+ALTER TABLE verficador
+    MODIFY COLUMN transporte_publico ENUM('S', 'N'),
+    MODIFY COLUMN bicicleta ENUM('S', 'N'),
+    MODIFY COLUMN caminhada ENUM('S', 'N'),
+    MODIFY COLUMN carro ENUM('S', 'N'),
+    MODIFY COLUMN carro_eletrico ENUM('S', 'N'),
+    MODIFY COLUMN carona ENUM('S', 'N');
 
 #exibir tabela
 select * from verficador;
