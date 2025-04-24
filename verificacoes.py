@@ -2,14 +2,22 @@ from conexao import conectar
 bd = conectar()
 cursor = bd.cursor()
 
-cursor.execute("SELECT * FROM sustentabilidade_pessoal")
+cursor.execute("SELECT * FROM verficador")
 myresult = cursor.fetchall()
 print(myresult)
 
 print('Seja bem-vindo ao Sistema de Monitoramento de Sustentabilidade')
 
 
-data=input('Digite a data atual: ')
+from datetime import datetime
+
+while True:
+    entrada_data = input('Digite a data atual (DDMMYYYY): ')
+    try:
+        data = datetime.strptime(entrada_data, "%d%m%Y").date()
+        break
+    except ValueError:
+        print("Data inválida. Por favor, insira no formato DDMMYYYY.")
 
 validador = False
 while not validador:
@@ -78,8 +86,22 @@ carona = input('6. Carona compartilhada (Fósseis): ').upper()
 while carona not in ('S', 'N'):
     print('Resposta inválida. Por favor, digite S ou N.')
     carona = input('6. Carona compartilhada (Fósseis): ').upper()
+#inseridno os dados
+sql = """
+INSERT INTO verficador (
+    data, qtd_de_agua_litros, uso_energia_eletrica_kwh, residuos_nao_reciclaveis_kg, porcentagem_de_reciclado_hoje,
+    transporte_publico, bicicleta, caminhada, carro, carro_eletrico, carona
+) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+"""
 
-
+# verificando se deu certo 
+valores=(data, qtd_de_agua_litros, uso_energia_eletrica_kwh, residuos_nao_reciclaveis_kg, 
+    porcentagem_de_reciclado_hoje, transportePublico, bicicleta, caminhada, 
+    carro, carroEletrico, carona
+)
+cursor.execute(sql, valores)
+bd.commit()
+print("\n Dados inseridos com sucesso!\n")
 # Verifica o consumo de água
 if qtd_de_agua_litros < 150:
    print('Consumo de Água: Alta sustentabilidade')
@@ -129,4 +151,24 @@ else:
     print("Uso de transporte: Sustentabilidade moderada")
 
 
-# Feito os testes nas condicionais
+# media do banco
+
+# Mostrar médias do banco
+cursor.execute("""
+SELECT 
+    AVG(qtd_de_agua_litros), 
+    AVG(uso_energia_eletrica_kwh), 
+    AVG(residuos_nao_reciclaveis_kg), 
+    AVG(porcentagem_de_reciclado_hoje )
+FROM verficador
+""")
+media = cursor.fetchone()
+
+print("Média Geral do Sistema:")
+print(f"Água: {media[0]:.2f} L")
+print(f"Energia: {media[1]:.2f} kWh")
+print(f"Resíduos: {media[2]:.2f} kg")
+print(f"Reciclado: {media[3]:.2f} %")
+
+cursor.close()
+bd.close()
