@@ -1,20 +1,45 @@
 import mysql.connector
-def conectar():
-    try:
-        conexao = mysql.connector.connect(
-            host= 'localhost', # Con banco
-            user='root',
-            port='3306',
-            password= "saopaulo",
-            database='projeto_sustentabilidade'
-)
-        if conexao.is_connected():
-            print('conectadoo com sucesso')
-            return conexao
-    except mysql.connector.Error as erro:
-        print("Erro ao conectar ao MySQL:", erro)
-        return None
 
+# con banco
+def obtemConexao (servidor, usuario, senha, bd):
+   if obtemConexao.conexao==None:
+       obtemConexao.conexao = mysql.connector.connect(f"host={servidor};"
+                                                      f"user={usuario};"
+                                                      f"password={senha};"
+                                                      f"database={bd};")
+   return obtemConexao.conexao
+obtemConexao.conexao=None
 
+# insert 
+def insercao_de_aluno (ra,nome):
+    comando=f"insert into Alunos (RA,Nome) values ({ra},'{nome}’)" 
+    conexao=obtemConexao("172.16.12.14","XXXXX","YYYYY","XXXXX")
+    cursor=conexao.cursor()
+    cursor.execute(comando)
+    cursor.commit()
 
-# Conexão com o banco mysql basico
+# select
+def selecao_de_aluno (ra):
+    comando=f"select * from Alunos where RA={ra}" 
+    conexao=obtemConexao("172.16.12.14","XXXXX","YYYYY","XXXXX")
+    cursor=conexao.cursor()
+    cursor.execute(comando)
+    linhas=cursor.fetchall()
+    if linhas==[]: return None
+    return linhas[0]
+
+# select all
+def selecao_de_alunos ( ):
+    comando=("select * from Alunos")
+    conexao=obtemConexao("172.16.12.14","XXXXX","YYYYY","XXXXX")
+    cursor=conexao.cursor()
+    cursor.execute(comando)
+    linhas=cursor.fetchall()
+    return linhas
+
+def fechaConexao ( ):
+    conexao=obtemConexao("172.16.12.14","XXXXX","YYYYY","XXXXX")
+    cursor.close()
+    conexão.close()
+
+    
