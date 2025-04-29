@@ -1,18 +1,51 @@
-print("========================================================")
-print("  Sistema de Monitoramento de Sustentabilidade Pessoal")
-print("========================================================")
-print("1. Inserir dados de monitoramento")
-print("2. Alterar dados de monitoramento")
-print("3. Apagar dados de monitoramento")
-print("4. Listar cada monitoramento diário e classificar")
-print("5. Calcular e mostrar as médias dos parâmetros e classificar")
-print("6. Saída do sistema")
-print("========================================================")
-opcao = input("Digite o número da opção desejada: ")
 
+import mysql.connector
+
+#ao entrar no programa 
+def primeiro_contato ():
+   print(" _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ")
+   print("|                                                               |")
+   print("|     Sistema de Monitoramento de Sustentabilidade Pessoal      |")        
+   print("|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|")
+   print("|                                                               |")
+   print("| 1. Inserir dados de monitoramento                             |") # feito
+   print("| 2. Alterar dados de monitoramento                             |")
+   print("| 3. Apagar dados de monitoramento                              |") #feito
+   print("| 4. Listar cada monitoramento diário e classificar             |") #feito
+   print("| 5. Calcular e mostrar as médias dos parâmetros e classificar  |") 
+   print("| 6. Sair do sistema                                            |") #feito
+   print("|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|")
+   print()
+   opcao = input("Digite o número da opção desejada: ")
+
+#conexao  
+def obtemConexao (localhost, root, saopaulo, projeto_sustentabilidade):
+   if obtemConexao.conexao==None:
+      obtemConexao.conexao = mysql.connector.connect(host    =f"{localhost}",\
+                                                     user    =f"{root}",\
+                                                     password=f"{saopaulo}",\
+                                                     database=f"{projeto_sustentabilidade}")
+
+   return obtemConexao.conexao
+obtemConexao.conexao=None
+   
+#inserir no banco       
+def insercao_dados (data, qtd_de_agua_litros, uso_energia_eletria_kwh, residuos_nao_reciclaveis_kg, porcentagem_de_reciclado_hoje, transporte_publico, bicicleta, caminhada, carro, carro_eletrico, carona):
+   comando = "INSERT INTO verficador" +\
+             "(data, qtd_de_agua_litros , uso_energia_eletrica_kwh," +\
+             "residuos_nao_reciclaveis_kg , porcentagem_de_reciclado_hoje," +\
+             "transporte_publico, bicicleta, caminhada, carro , carro_eletrico , carona" +\
+             "VALUES" +\
+            f"('{data}', '{qtd_de_agua_litros}', '{uso_energia_eletria_kwh}', '{residuos_nao_reciclaveis_kg}', '{porcentagem_de_reciclado_hoje}','{transporte_publico}', '{bicicleta}', '{caminhada}', '{carro}', '{carro_eletrico}', '{carona}')"
+
+   conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade") #arrumar
+   cursor=conexao.cursor()
+   cursor.execute(comando)
+   conexao.commit()
+
+#inserir valores 
 from datetime import datetime
-
-if opcao == '1':
+def inserir ():
    while True:
       entrada_data = input('Digite a data atual (DDMMYYYY): ')
       try:
@@ -91,24 +124,35 @@ if opcao == '1':
 
    print("\n Dados inseridos com sucesso!\n")
 
-if opcao == '2':
+def alterar ():
    print('teste')
    
-if opcao == '3':
+def excluir ():
    confirmacao = input('Tem certeza que deseja excluir o ultimo dado cadastrado? ').upper()
    while confirmacao not in ('S', 'N'):
       print('Resposta inválida. Por favor, digite S ou N.')
       carona = input('Tem certeza que deseja excluir o ultimo dado cadastrado? ').upper()
    
    if confirmacao == 'S':
-      print('Delete')# Delete banco
+      data_excluir = input("Digite a data que deseja deletar: ")
+      comando = ("DELETE FROM verficador WHERE data = ?", (data_excluir,))
+      conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade")
+      cursor=conexao.cursor()
+      cursor.execute(comando)
+      print("Registro deletado com sucesso!\n")
    else :
       print('Sistema encerrado!')
-      
-if opcao == '4':
-   print('select')
 
-if opcao == '5':
+#lista todos os registros       
+def listar ():
+   comando=("SELECT * FROM verficador")
+   conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade")
+   cursor=conexao.cursor()
+   cursor.execute(comando)
+   linhas=cursor.fetchall()
+   return linhas
+
+def medias ():
     # Verifica o consumo de água
    if qtd_de_agua_litros < 150:
       print('Consumo de Água: Alta sustentabilidade')
@@ -157,5 +201,29 @@ if opcao == '5':
    else:
       print("Uso de transporte: Sustentabilidade moderada")
       
-if opcao == '6':
-   print('Saindo do sistema...')
+def fechaConexao ():
+    conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade")
+    cursor=conexao.cursor()
+    cursor.close()
+    conexao.close()
+    print('Saindo do sistema...')
+
+primeiro_contato()
+opcao = input("Digite o número da opção desejada: ")
+
+desejaSairDoPrograma=False
+while not desejaSairDoPrograma:
+
+    if opcao==1:
+        inserir()
+    elif opcao==2:
+        alterar() #nao ta feito
+    elif opcao==3:
+        excluir() 
+    elif opcao==4:
+        listar()
+    elif opcao==5:
+        medias() #nao ta feito
+    else: 
+        fechaConexao()
+        desejaSairDoPrograma=True
