@@ -9,14 +9,14 @@ def primeiro_contato ():
    print("|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|")
    print("|                                                               |")
    print("| 1. Inserir dados de monitoramento                             |") # feito
-   print("| 2. Alterar dados de monitoramento                             |")
+   print("| 2. Alterar dados de monitoramento                             |") #feito
    print("| 3. Apagar dados de monitoramento                              |") #feito
    print("| 4. Listar cada monitoramento diário e classificar             |") #feito
    print("| 5. Calcular e mostrar as médias dos parâmetros e classificar  |") 
    print("| 6. Sair do sistema                                            |") #feito
    print("|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|")
    print()
-   opcao = input("Digite o número da opção desejada: ")
+   
 
 #conexao  
 def obtemConexao (localhost, root, saopaulo, projeto_sustentabilidade):
@@ -124,8 +124,57 @@ def inserir ():
 
    print("\n Dados inseridos com sucesso!\n")
 
+#atualizar uma informação
 def alterar ():
-   print('teste')
+    
+    data_atualizar = input("Digite a data que deseja alterar (AAAA-MM-DD): ")
+    #escolher oq quer mudar
+    print(" _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ")
+    print("|                                                    |")
+    print("|                Menu de Atualização:                |")  
+    print("| _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|")  
+    print("|                                                    |")    
+    print("| 1 - Atualizar água (L)                             |")              
+    print("| 2 - Atualizar energia eletrica (kwh)               |")
+    print("| 3 - Atualizar residuos não reciclados (kg)         |")
+    print("| 4 - Atualizar reciclados (%)                       |")
+    print("| 5 - Atualizar uso de transporte público (S/N)      |")
+    print("| 6 - Atualizar uso de caminhada (S/N)               |") 
+    print("| 7 - Atualizar uso de bicicleta (S/N)               |")
+    print("| 8 - Atualizar uso de carro (S/N)                   |")
+    print("| 9 - Atualizar uso de carro elétrico (S/N)          |")
+    print("| 10 - Atualizar uso de carona (S/N)                 |")
+    print("| _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ")
+    
+    
+    dados = {
+        '1': 'qtd_de_agua_litros',
+        '2': 'uso_energia_eletrica_kwh',
+        '3': 'residuos_nao_reciclaveis_kg',
+        '4': 'porcentagem_de_reciclado_hoje',
+        '5': 'transporte_pulico',
+        '6': 'caminhada',
+        '7': 'bicicleta',
+        '8': 'carro',
+        '9': 'carro_eletrico',
+        '10':'carona'
+    }
+    while True:
+        dados_opcao = input("Digite o número do campo que deseja atualizar: ")
+        if dados_opcao in dados:
+            break
+        else: 
+            print("Opção não existe; Tente novamente!")
+    
+    novo_valor = input(f"Digite o novo valor para {dados[dados_opcao]}: ")
+
+    comando = f"UPDATE verficador SET {dados_opcao} = {novo_valor} WHERE data = {data_atualizar}"
+    conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade") #arrumar
+    cursor=conexao.cursor()
+    cursor.execute(comando)
+    conexao.commit()
+    print("Atualização realizada com sucesso!")
+   
    
 def excluir ():
    confirmacao = input('Tem certeza que deseja excluir o ultimo dado cadastrado? ').upper()
