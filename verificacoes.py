@@ -34,7 +34,7 @@ def insercao_dados (data, qtd_de_agua_litros, uso_energia_eletria_kwh, residuos_
    comando = "INSERT INTO verficador" +\
              "(data, qtd_de_agua_litros , uso_energia_eletrica_kwh," +\
              "residuos_nao_reciclaveis_kg , porcentagem_de_reciclado_hoje," +\
-             "transporte_publico, bicicleta, caminhada, carro , carro_eletrico , carona" +\
+             "transporte_publico, bicicleta, caminhada, carro , carro_eletrico , carona) " +\
              "VALUES" +\
             f"('{data}', '{qtd_de_agua_litros}', '{uso_energia_eletria_kwh}', '{residuos_nao_reciclaveis_kg}', '{porcentagem_de_reciclado_hoje}','{transporte_publico}', '{bicicleta}', '{caminhada}', '{carro}', '{carro_eletrico}', '{carona}')"
 
@@ -62,7 +62,7 @@ def inserir ():
          print('Inválido, o valor deve ser numérico; Tente novamente!')
       else:
          validador = True
-         
+    
    validador = False
    while not validador:
       try:
@@ -75,7 +75,7 @@ def inserir ():
    validador = False
    while not validador:
       try: 
-         residuos_nao_reciclaveis_kg=float(input('Quantos kg de resíduos não recicláveis você gerou hoje: '))
+         residuos_nao_reciclaveis_kg = float(input('Quantos kg de resíduos não recicláveis você gerou hoje: '))
       except ValueError:
          print('Inválido, o valor deve ser numérico; Tente novamente!')
       else: 
@@ -92,7 +92,7 @@ def inserir ():
 
    print ('Quais meios de transporte você utilizou hoje? Responda apenas (S / N)')
 
-   transportePublico = input('1. Transporte público (Ônibus,metrô, trem): ').upper()
+   transportePublico= input('1. Transporte público (Ônibus,metrô, trem): ').upper()
    while transportePublico not in ('S', 'N'):
       print('Resposta inválida. Por favor, digite S ou N.')
       transportePublico = input('1. Transporte público (Ônibus,metrô, trem): ').upper()
@@ -101,7 +101,7 @@ def inserir ():
    while bicicleta not in ('S', 'N'):
       print('Resposta inválida. Por favor, digite S ou N.')
       bicicleta = input('2. Bicicleta: ').upper()
-
+ 
    caminhada = input('3. Caminhada: ').upper()
    while caminhada not in ('S', 'N'):
       print('Resposta inválida. Por favor, digite S ou N.')
@@ -112,12 +112,12 @@ def inserir ():
       print('Resposta inválida. Por favor, digite S ou N.')
       carro = input('4. Carro (Combustível Fóssil): ').upper()
 
-   carroEletrico = input('5. Carro elétrico: ').upper()
+   carroEletrico= input('5. Carro elétrico: ').upper()
    while carroEletrico not in ('S', 'N'):
       print('Resposta inválida. Por favor, digite S ou N.')
       carroEletrico = input('5. Carro elétrico: ').upper()
 
-   carona = input('6. Carona compartilhada (Fósseis): ').upper()
+   carona= input('6. Carona compartilhada (Fósseis): ').upper()
    while carona not in ('S', 'N'):
       print('Resposta inválida. Por favor, digite S ou N.')
       carona = input('6. Carona compartilhada (Fósseis): ').upper()
@@ -144,7 +144,7 @@ def alterar ():
     print("| 8 - Atualizar uso de carro (S/N)                   |")
     print("| 9 - Atualizar uso de carro elétrico (S/N)          |")
     print("| 10 - Atualizar uso de carona (S/N)                 |")
-    print("| _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ ")
+    print("| _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|")
     
     
     dados = {
@@ -152,7 +152,7 @@ def alterar ():
         '2': 'uso_energia_eletrica_kwh',
         '3': 'residuos_nao_reciclaveis_kg',
         '4': 'porcentagem_de_reciclado_hoje',
-        '5': 'transporte_pulico',
+        '5': 'transporte_publico',
         '6': 'caminhada',
         '7': 'bicicleta',
         '8': 'carro',
@@ -168,8 +168,8 @@ def alterar ():
     
     novo_valor = input(f"Digite o novo valor para {dados[dados_opcao]}: ")
 
-    comando = f"UPDATE verficador SET {dados_opcao} = {novo_valor} WHERE data = {data_atualizar}"
-    conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade") #arrumar
+    comando = f"UPDATE verficador SET {dados} = %s WHERE data = %s"
+    conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade") 
     cursor=conexao.cursor()
     cursor.execute(comando)
     conexao.commit()
@@ -184,7 +184,7 @@ def excluir ():
    
    if confirmacao == 'S':
       data_excluir = input("Digite a data que deseja deletar: ")
-      comando = ("DELETE FROM verficador WHERE data = ?", (data_excluir,))
+      comando = "DELETE FROM verficador WHERE data = %s"
       conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade")
       cursor=conexao.cursor()
       cursor.execute(comando)
@@ -201,27 +201,46 @@ def listar ():
    linhas=cursor.fetchall()
    return linhas
 
-def medias ():
-    # Verifica o consumo de água
-   if qtd_de_agua_litros < 150:
+def medias (): 
+   conexao = obtemConexao("localhost", "root", "saopaulo", "projeto_sustentabilidade")
+   cursor = conexao.cursor()
+
+   cursor.execute("""
+      SELECT 
+         AVG(qtd_de_agua_litros), 
+         AVG(uso_energia_eletrica_kwh), 
+         AVG(residuos_nao_reciclaveis_kg), 
+         AVG(porcentagem_de_reciclado_hoje )
+      FROM verficador
+      """)
+   media = cursor.fetchone()
+
+   print("Média Geral do Sistema:")
+   print(f"Água: {media[0]:.2f} L")
+   print(f"Energia: {media[1]:.2f} kWh")
+   print(f"Resíduos: {media[2]:.2f} kg") #nao tem?
+   print(f"Reciclado: {media[3]:.2f} %")
+
+   # água
+   if media[0] < 150:
       print('Consumo de Água: Alta sustentabilidade')
-   elif qtd_de_agua_litros >= 150 and qtd_de_agua_litros <= 200:
+   elif media[0] >= 150 and media[0] <= 200:
       print('Consumo de Água: Moderada sustentabilidade')
    else:
       print('Consumo de Água: Baixa sustentabilidade')
 
-   # Verifica o consumo de energia
-   if uso_energia_eletrica_kwh < 5:
+   # energia
+   if media[1] < 5:
       print('Consumo de Energia Elétrica: Alta sustentabilidade')
-   elif uso_energia_eletrica_kwh >= 5 and uso_energia_eletrica_kwh <= 10:
+   elif media[1] >= 5 and media[1] <= 10:
       print('Consumo de Energia Elétrica: Moderada sustentabilidade')
    else:
       print('Consumo de Energia Elétrica: Baixa sustentabilidade')
       
-   # Verifica a geração de resíduos não reciclaveis 
-   if porcentagem_de_reciclado_hoje < 20:
+   # resíduos reciclados 
+   if media[3] < 20:
       print('Porcentagem de resíduos reciclados: Baixa sustentabilidade')
-   elif porcentagem_de_reciclado_hoje >= 20 and porcentagem_de_reciclado_hoje <= 50:
+   elif media[3] >= 20 and media[3] <= 50:
       print('Porcentagem de resíduos reciclados: Moderada sustentabilidade')
    else:
       print('Porcentagem de resíduos reciclados: Alta sustentabilidade') 
@@ -249,7 +268,9 @@ def medias ():
       print("Uso de transporte: Baixa sustentabilidade")
    else:
       print("Uso de transporte: Sustentabilidade moderada")
-      
+
+   cursor.close()
+         
 def fechaConexao ():
     conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade")
     cursor=conexao.cursor()
@@ -266,7 +287,7 @@ while not desejaSairDoPrograma:
     if opcao==1:
         inserir()
     elif opcao==2:
-        alterar() #nao ta feito
+        alterar() 
     elif opcao==3:
         excluir() 
     elif opcao==4:
