@@ -325,34 +325,35 @@ def fechaConexao ():
    
 primeiro_contato()
 
-digitou_corretamente = False
-while not digitou_corretamente:
-   try:
-      opcao = int(input("Digite o número da opção desejada: "))
-   except ValueError:
-      print("Digite apenas números; tente novamente!")
-   else:
-      if opcao <= 0 or opcao > 6:
-         print("Não existe essa opção; tente novamente!")
-      else:
-         digitou_corretamente = True
 
 desejaSairDoPrograma=False
 while not desejaSairDoPrograma:
 
-    if opcao==1:
-        inserir()
-    elif opcao==2:
-        alterar() 
-    elif opcao==3:
-        excluir() 
-    elif opcao==4:
-        listar()
-    elif opcao==5:
-        medias() #nao ta feito
-    else: 
-        fechaConexao()
-        desejaSairDoPrograma=True
+   digitou_corretamente = False
+   while not digitou_corretamente:
+      try:
+         opcao = int(input("Digite o número da opção desejada: "))
+      except ValueError:
+         print("Digite apenas números; tente novamente!")
+      else:
+         if opcao <= 0 or opcao > 6:
+            print("Não existe essa opção; tente novamente!")
+         else:
+            digitou_corretamente = True
+
+   if opcao==1:
+      inserir()
+   elif opcao==2:
+      alterar() 
+   elif opcao==3:
+      excluir() 
+   elif opcao==4:
+      listar()
+   elif opcao==5:
+      medias() #nao ta feito
+   else: 
+      fechaConexao()
+      desejaSairDoPrograma=True
 
 print()        
 print('PROGRAMA ENCERRADO; OBRIGADO POR USAR ESTE SISTEMA DE MONITORAMENTO PESSOAL DE SUSTENTABILIDADE!')
