@@ -221,7 +221,7 @@ def listagem ():
     return linhas
 
 #lista todos os registros  
-def listar (): #tá em loop??????
+def listar (): 
     try:
         linha=listagem()
     except Error:    
@@ -293,27 +293,34 @@ def medias ():
 
    sustentavel = 0
    naoSustentavel = 0
+#media para transportes em geral(publico, eletrico e fosseis)
+   
+   cursor.execute("""
+        SELECT 
+            SUM(transporte_publico = 'S') +
+            SUM(bicicleta = 'S') +
+            SUM(caminhada = 'S') +
+            SUM(carro_eletrico = 'S') AS sustentavel,
+            
+            SUM(carro = 'S') +
+            SUM(carona = 'S') AS nao_sustentavel
+        FROM verficador
+    """)
 
-   if transportePublico == 'S':
-      sustentavel += 1
-   if bicicleta == 'S':
-      sustentavel +=1
-   if caminhada == 'S':
-      sustentavel += 1
-   if carro == 'S':
-      naoSustentavel+= 1
-   if carroEletrico == 'S':
-      sustentavel+= 1
-   if carona == 'S':
-      naoSustentavel+= 1
+ 
+  
+   resultado = cursor.fetchone()
+   sustentavel, nao_sustentavel = resultado
 
+   print(f"Total sustentável: {sustentavel}")
+   print(f"Total não sustentável: {nao_sustentavel}")
 
-   if sustentavel >=1 and naoSustentavel == 0:
-      print("Uso de transporte: Alta sustentabilidade")
-   elif sustentavel == 0 and naoSustentavel >= 1:
-      print("Uso de transporte: Baixa sustentabilidade")
+   if sustentavel > nao_sustentavel:
+        print("Transporte: Alta sustentabilidade")
+   elif sustentavel == nao_sustentavel:
+        print("Transporte: Sustentabilidade moderada")
    else:
-      print("Uso de transporte: Sustentabilidade moderada")
+        print("Transporte: Baixa sustentabilidade")
 
    cursor.close()
          
