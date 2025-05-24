@@ -43,6 +43,7 @@ def insercao_dados (data, qtd_de_agua_litros, uso_energia_eletria_kwh, residuos_
    cursor.execute(comando)
    conexao.commit()
 
+
 #inserir valores 
 from datetime import datetime
 def inserir ():
@@ -128,7 +129,8 @@ def inserir ():
             carroEletrico, carona)
    
    print("Dados inseridos com sucesso!")
-
+   return
+primeiro_contato()
 #atualizar uma informação
 def alterar ():
    while True:
@@ -179,6 +181,7 @@ def alterar ():
    novo_valor = input(f"Digite o novo valor para {dados[dados_opcao]}: ")
 
    comando = f"UPDATE verficador SET {dados[dados_opcao]} = '{novo_valor}' WHERE data = '{data_atualizar}'"
+  
 
    try:
       conexao=obtemConexao("localhost","root","saopaulo","projeto_sustentabilidade")
@@ -189,6 +192,7 @@ def alterar ():
    except Error as e:
       print(f"Erro ao atualizar: {e}")
    
+   return
 def excluir ():
    confirmacao = input('Tem certeza que deseja excluir um registro? ').upper()
    while confirmacao not in ('S', 'N'):
@@ -330,15 +334,15 @@ def fechaConexao ():
     cursor.close()
     conexao.close()
    
-primeiro_contato()
+
 
 
 desejaSairDoPrograma=False
 while not desejaSairDoPrograma:
-
    digitou_corretamente = False
    while not digitou_corretamente:
       try:
+         primeiro_contato()
          opcao = int(input("Digite o número da opção desejada: "))
       except ValueError:
          print("Digite apenas números; tente novamente!")
@@ -346,7 +350,7 @@ while not desejaSairDoPrograma:
          if opcao <= 0 or opcao > 6:
             print("Não existe essa opção; tente novamente!")
          else:
-            digitou_corretamente = True
+            digitou_corretamente=True
 
    if opcao==1:
       inserir()
@@ -361,6 +365,7 @@ while not desejaSairDoPrograma:
    else: 
       fechaConexao()
       desejaSairDoPrograma=True
+
 
 print()        
 print('PROGRAMA ENCERRADO; OBRIGADO POR USAR ESTE SISTEMA DE MONITORAMENTO PESSOAL DE SUSTENTABILIDADE!')
