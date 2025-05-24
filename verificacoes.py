@@ -11,8 +11,8 @@ def primeiro_contato ():
    print("| 1. Inserir dados de monitoramento                             |") 
    print("| 2. Alterar dados de monitoramento                             |") 
    print("| 3. Apagar dados de monitoramento                              |") 
-   print("| 4. Listar cada monitoramento diário e classificar             |") #arrumar  
-   print("| 5. Calcular e mostrar as médias dos parâmetros e classificar  |") #terminar
+   print("| 4. Listar cada monitoramento diário e classificar             |")  
+   print("| 5. Calcular e mostrar as médias dos parâmetros e classificar  |")
    print("| 6. Sair do sistema                                            |")
    print("|_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _|")
    print()
